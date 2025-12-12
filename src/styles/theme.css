@@ -1,0 +1,48 @@
+/* src/styles/theme.css
+
+    ⁄—Ì› „ €Ì—«  CSS «·—∆Ì”Ì… ·‹ VeXachat.
+   Â–Â «·„ €Ì—«   ‰”ﬁ „⁄ √·Ê«‰ «·‰ÌÊ‰ «·„Õœœ… ›Ì tailwind.config.js
+*/
+
+:root {
+  /* ============================================
+     √·Ê«‰ «·‰ÌÊ‰ (C- = Color)
+     ============================================ */
+  --c-electric: #00F0FF;     /* Cyan / Electric Blue */
+  --c-pink: #FF00C8;         /* Neon Pink */
+  --c-violet: #B500FF;       /* Bright Violet */
+  --c-green: #00FF9F;        /* Neon Green */
+  --c-yellow: #FFFF00;       /* Bright Yellow */
+
+  /* ============================================
+     √·Ê«‰ «·Œ·›Ì… Ê«·‰’
+     ============================================ */
+  --c-background-darkest: #0A0A0A; /* Dark-950 */
+  --c-background-dark: #151515;    /* Dark-900 */
+  --c-text-light: #EAEAEA;         /* Light Gray */
+  --c-text-muted: #888888;         /* Muted Gray */
+
+  /* ============================================
+     «·ŒÿÊÿ
+     ============================================ */
+  --font-primary: 'Inter', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+
+  /* ============================================
+     «·“Ê«Ì« Ê«·ÕÊ«›
+     ============================================ */
+  --border-radius-base: 1rem;
+  --border-radius-large: 1.5rem;
+
+  /* ============================================
+     «·‘›«›Ì… (Opacity)
+     ============================================ */
+  --opacity-glass: 0.05;
+}
+
+/*  ÿ»Ìﬁ «·ŒÿÊÿ Ê«·√·Ê«‰ «·√”«”Ì… ⁄·Ï «·Ã”„ */
+body {
+  background-color: var(--c-background-darkest);
+  color: var(--c-text-light);
+  font-family: var(--font-primary);
+}

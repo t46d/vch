@@ -1,0 +1,11 @@
+﻿# يمكنك إنشاء ملف .gitignore يدوياً أو استخدام الأمر touch
+touch .gitignore
+# ثم افتحه وأضف المحتوى الأمني، لا يمكنني كتابته مباشرة هنا في bash
+# المحتوى المطلوب في .gitignore:
+# .env
+# .env.local
+# .next/
+# node_modules.env
+.env.local
+.next/
+node_modules/
