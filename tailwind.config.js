@@ -1,4 +1,4 @@
-﻿/** @type {import('tailwindcss').Config} */
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -25,31 +25,23 @@ module.exports = {
       backgroundImage: {
         'gradient-cyber': 'linear-gradient(135deg, #00F0FF 0%, #FF00C8 50%, #B500FF 100%)',
         'gradient-neon': 'linear-gradient(135deg, #00F0FF, #FF00C8)',
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
       boxShadow: {
         'neon': '0 0 20px rgba(0, 240, 255, 0.5), 0 0 40px rgba(255, 0, 200, 0.3)',
         'neon-pink': '0 0 20px rgba(255, 0, 200, 0.5)',
         'neon-violet': '0 0 20px rgba(181, 0, 255, 0.5)',
-        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-      },
-      backdropBlur: {
-        xs: '2px',
       },
       animation: {
         'gradient': 'gradient 8s linear infinite',
         'float': 'float 6s ease-in-out infinite',
         'glow': 'glow 2s ease-in-out infinite alternate',
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
         gradient: {
           '0%, 100%': {
-            'background-size': '200% 200%',
             'background-position': '0% 50%'
           },
           '50%': {
-            'background-size': '200% 200%',
             'background-position': '100% 50%'
           },
         },
@@ -69,10 +61,6 @@ module.exports = {
             'box-shadow': '0 0 30px rgba(255, 0, 200, 0.8)',
           },
         },
-      },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['Fira Code', 'monospace'],
       },
     },
   },
