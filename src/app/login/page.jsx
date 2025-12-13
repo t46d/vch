@@ -1,13 +1,22 @@
+import { redirect } from 'next/navigation';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
 import LoginForm from './LoginForm';
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (user) {
+    redirect('/profile');
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] p-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl">
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">
-          تسجيل الدخول
-        </h2>
-        <LoginForm />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      <LoginForm />
+      <div className="absolute top-4 right-4 text-sm text-gray-500">
+        <a href="/signup" className="text-cyan-400 hover:text-cyan-300">New User?</a>
       </div>
     </div>
   );
