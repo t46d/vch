@@ -1,0 +1,11 @@
+# ملفات ومجلدات نتجاهلها في Vercel
+node_modules/
+.next/
+.git/
+*.log
+.env
+.env.local
+.DS_Store
+coverage/
+dist/
+out/
