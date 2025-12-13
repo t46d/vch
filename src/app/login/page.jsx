@@ -1,51 +1,14 @@
-﻿// src/app/login/page.jsx
-// هذه الصفحة هي Server Component
+import LoginForm from './LoginForm';
 
-import { redirect } from 'next/navigation';
-import { createClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
-import LoginForm from './LoginForm'; // سننشئ هذا الملف لاحقًا
-
-export default async function LoginPage() {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    // التحقق من الجلسة الحالية
-    const { data, error } = await supabase.auth.getUser();
-
-    // إذا كان المستخدم مسجلاً، قم بتحويله إلى صفحة الاكتشاف
-    if (data?.user) {
-        redirect('/discover');
-    }
-
-    return (
-        <div className="min-h-screen flex items-center justify-center p-4" style={{
-            // خلفية سوداء مظلمة لـ Cyberpunk
-            background: 'radial-gradient(circle at center, rgba(10, 10, 10, 1) 0%, rgba(0, 0, 0, 1) 100%)'
-        }}>
-            <div className="w-full max-w-md">
-                <div className="text-center mb-8">
-                    <h1
-                        className="text-6xl font-extrabold mb-2 tracking-tighter"
-                        style={{
-                            background: 'linear-gradient(90deg, #00F0FF, #FF00C8)',
-                            WebkitBackgroundClip: 'text',
-                            backgroundClip: 'text',
-                            color: 'transparent',
-                            filter: 'drop-shadow(0 0 10px rgba(0, 240, 255, 0.5))'
-                        }}
-                    >
-                        VEXACHAT
-                    </h1>
-                    <p className="text-gray-400 text-lg">
-                        Await your next connection.
-                    </p>
-                </div>
-
-                {/* مكون العميل لتسجيل الدخول / التسجيل */}
-                <LoginForm />
-
-            </div>
-        </div>
-    );
+export default function LoginPage() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[80vh] p-4">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">
+          تسجيل الدخول
+        </h2>
+        <LoginForm />
+      </div>
+    </div>
+  );
 }
