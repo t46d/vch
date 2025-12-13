@@ -1,47 +1,63 @@
-﻿// src/services/auth.js
-// Server Actions for Authentication
+import { createClient } from '@/utils/supabase/client';
 
-'use server';
-
-import { createClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+const supabase = createClient();
 
 /**
- * دالة تسجيل الدخول باستخدام البريد الإلكتروني وكلمة المرور
- * @param {FormData} formData - البيانات المرسلة من نموذج تسجيل الدخول
- * @returns {object | undefined} - كائن يحتوي على الخطأ في حالة الفشل
+ * دالة لتسجيل مستخدم جديد
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<object>} - بيانات الجلسة أو خطأ
  */
-export async function signIn(formData) {
-    const email = formData.get('email');
-    const password = formData.get('password');
-    
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+export async function signUp({ email, password }) {
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
+    });
 
-    const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-    });
-
-    if (error) {
-        return { error: error.message };
-    }
-
-    // في حالة النجاح، يتم توجيه المستخدم إلى صفحة الاكتشاف
-    redirect('/discover');
+    if (error) throw error;
+    return { data, success: true };
+  } catch (error) {
+    console.error('Signup Error:', error.message);
+    return { error: error.message, success: false };
+  }
 }
 
 /**
- * دالة تسجيل الخروج (Server Action)
- * @returns {void}
+ * دالة لتسجيل دخول مستخدم
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<object>} - بيانات الجلسة أو خطأ
+ */
+export async function signIn({ email, password }) {
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) throw error;
+    return { data, success: true };
+  } catch (error) {
+    console.error('Signin Error:', error.message);
+    return { error: error.message, success: false };
+  }
+}
+
+/**
+ * دالة لتسجيل الخروج
+ * @returns {Promise<object>} - خطأ في حال الفشل
  */
 export async function signOut() {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    await supabase.auth.signOut();
-    redirect('/login');
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+    return { success: true };
+  } catch (error) {
+    console.error('Signout Error:', error.message);
+    return { error: error.message, success: false };
+  }
 }
-
-// **ملاحظة:** تم حذف دالة signUp لأن منطقها يتم الآن إدارته بالكامل في جانب العميل (SignupForm.jsx)
-// بما في ذلك إنشاء الملف الشخصي.
