@@ -10,8 +10,14 @@ const nextConfig = {
       },
     ],
   },
-  // ميزات جديدة في Next.js 15
+  // إعدادات مهمة لـ Vercel
+  output: 'standalone',
+  
+  // إذا كنت تستخدم Server Actions (اختياري)
   experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb'
+    },
     optimizePackageImports: ['@supabase/supabase-js', 'lucide-react']
   }
 };
