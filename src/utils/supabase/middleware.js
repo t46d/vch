@@ -1,7 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 
-// دالة تحديث الجلسة يجب أن تُصَدَّر لتُستَدعَى من الملف الرئيسي (src/middleware.js)
 export async function updateSession(request) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -31,7 +30,7 @@ export async function updateSession(request) {
     }
   );
 
-  // تحديث الجلسة عن طريق استدعاء getUser() للتأكد من صلاحيتها
+  // تحديث الجلسة عن طريق الوصول إلى البيانات
   await supabase.auth.getUser();
 
   return supabaseResponse;
