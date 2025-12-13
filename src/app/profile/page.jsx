@@ -1,18 +1,13 @@
-﻿// src/app/profile/page.jsx
-import { createClient } from '@/utils/supabase/server'
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
+import { getCurrentUserProfile } from '@/services/profile';
+import ProfilePage from './ProfilePage';
 
-export default async function ProfilePage() {
-  const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+export default async function Profile() {
+  const profile = await getCurrentUserProfile();
 
-  if (!user) {
-    redirect('/login') // إعادة توجيه إذا لم يكن مسجل دخول
+  if (!profile) {
+    redirect('/login');
   }
 
-  return (
-    <div className="p-8 text-white">
-      <h1>مرحباً بك {user.email}</h1>
-    </div>
-  )
+  return <ProfilePage initialProfile={profile} />;
 }
