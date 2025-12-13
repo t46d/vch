@@ -1,25 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  images: {
-    unoptimized: true,
-    remotePatterns: [
+  async headers() {
+    return [
       {
-        protocol: 'https',
-        hostname: '**.supabase.co',
+        source: '/robots.txt',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/plain; charset=utf-8',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, s-maxage=86400',
+          },
+        ],
       },
-    ],
+    ];
   },
-  // إعدادات مهمة لـ Vercel
-  output: 'standalone',
-  
-  // إذا كنت تستخدم Server Actions (اختياري)
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '2mb'
-    },
-    optimizePackageImports: ['@supabase/supabase-js', 'lucide-react']
-  }
 };
 
 module.exports = nextConfig;
