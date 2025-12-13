@@ -2,14 +2,18 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    unoptimized: true, // مهم لـ Vercel
-    domains: [
-      'your-supabase-project.supabase.co',
-      'ugvdwxjnzrofrxekbhhm.supabase.co' // إذا كنت تستخدم السيرفر الموجود
-    ]
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.supabase.co',
+      },
+    ],
   },
-  // إضافة للإنتاج
-  output: 'standalone' // اختياري لكنه يحسن الأداء
+  // ميزات جديدة في Next.js 15
+  experimental: {
+    optimizePackageImports: ['@supabase/supabase-js', 'lucide-react']
+  }
 };
 
 module.exports = nextConfig;
