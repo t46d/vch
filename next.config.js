@@ -1,7 +1,6 @@
-﻿/** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['three'],
-  // أي إعدادات أخرى تحتاجها
+  // يمكن إضافة إعدادات مثل images, headers, etc. هنا
 };
 
 export default nextConfig;
