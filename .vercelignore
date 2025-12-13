@@ -1,7 +1,6 @@
-# ملفات ومجلدات نتجاهلها في Vercel
-node_modules/
-.next/
-.git/
+node_modules
+.next
+.git
 *.log
 .env
 .env.local
