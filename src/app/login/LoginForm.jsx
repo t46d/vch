@@ -1,83 +1,88 @@
-'use client';
+"use client";
 
 import { useState } from 'react';
-import { signIn } from '@/services/auth';
+import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [isSigningIn, setIsSigningIn] = useState(false);
   const router = useRouter();
+  const supabase = createClient();
 
-  const handleSubmit = async (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
     setError(null);
-    setLoading(true);
+    setIsSigningIn(true);
 
-    const { error: authError } = await signIn({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-    if (authError) {
-      setError(authError.message || 'خطأ في تسجيل الدخول. تحقق من بياناتك.');
+    if (error) {
+      setError(error.message);
+      setIsSigningIn(false);
     } else {
-      // إعادة توجيه إلى الصفحة الرئيسية بعد تسجيل الدخول الناجح
-      router.push('/');
+      router.push('/profile');
+      router.refresh();
     }
-
-    setLoading(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {error && (
-        <p className="p-3 text-sm text-red-700 bg-red-100 border border-red-400 rounded-md">
-          {error}
-        </p>
-      )}
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          البريد الإلكتروني
-        </label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-        />
-      </div>
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          كلمة المرور
-        </label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-        />
-      </div>
-      <button
-        type="submit"
-        disabled={loading}
-        className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-          loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-        }`}
-      >
-        {loading ? 'جاري الدخول...' : 'تسجيل الدخول'}
-      </button>
+    <div className="w-full max-w-md p-8 glass rounded-2xl animate-slide-up">
+      <h2 className="text-3xl font-bold text-center gradient-text mb-6">
+        Sign In
+      </h2>
 
-      <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
-        ليس لديك حساب؟{' '}
-        <Link href="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
-          إنشاء حساب
-        </Link>
-      </p>
-    </form>
+      <form onSubmit={handleSignIn} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-3 bg-gray-800/80 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            placeholder="your@email.com"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full px-4 py-3 bg-gray-800/80 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            placeholder="••••••••"
+          />
+        </div>
+
+        {error && (
+          <p className="text-sm text-red-400 bg-red-900/40 p-3 rounded-md animate-fade-in">
+            {error}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={isSigningIn}
+          className="w-full py-3 bg-gradient-neon text-black font-bold rounded-lg hover:scale-105 transition-transform disabled:opacity-50"
+        >
+          {isSigningIn ? 'Signing in...' : 'Sign In'}
+        </button>
+        
+        <div className="text-center text-sm text-gray-400">
+          Don&apos;t have an account?{' '}
+          <a href="/signup" className="text-cyan-400 hover:text-cyan-300">
+            Sign up
+          </a>
+        </div>
+      </form>
+    </div>
   );
 }
