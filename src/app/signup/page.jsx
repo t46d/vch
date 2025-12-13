@@ -1,23 +1,14 @@
-﻿// src/app/signup/page.jsx
-import { redirect } from 'next/navigation';
-import { createClient } from '@/utils/supabase/server';
 import SignupForm from './SignupForm';
 
-export default async function SignupPage() {
-  const supabase = createClient();
-
-  // التحقق مما إذا كان المستخدم مسجلاً دخوله بالفعل
-  const { data: { user } } = await supabase.auth.getUser();
-
-  // إذا كان المستخدم مسجلاً دخوله، يتم توجيهه إلى صفحة الملف الشخصي
-  if (user) {
-    redirect('/profile');
-  }
-
-  // إذا لم يكن مسجلاً دخوله، نعرض مكون التسجيل
+export default function SignupPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-transparent">
-      <SignupForm />
+    <div className="flex flex-col items-center justify-center min-h-[80vh] p-4">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">
+          إنشاء حساب جديد
+        </h2>
+        <SignupForm />
+      </div>
     </div>
   );
 }
