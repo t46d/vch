@@ -1,26 +1,19 @@
-﻿// src/app/auth/callback/route.js
-
-import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
+import { createClient } from '@/utils/supabase/server'
+import { NextResponse } from 'next/server'
 
 export async function GET(request) {
-    const requestUrl = new URL(request.url);
-    const code = requestUrl.searchParams.get('code');
-    const next = requestUrl.searchParams.get('next') || '/profile';
+  const requestUrl = new URL(request.url)
+  const code = requestUrl.searchParams.get('code')
 
-    if (code) {
-        const cookieStore = cookies();
-        const supabase = createClient(cookieStore);
+  if (code) {
+    const cookieStore = request.cookies
+    const supabase = createClient(cookieStore)
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
 
-        // تبادل رمز التأكيد (code) بجلسة المستخدم (session)
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) {
+      return NextResponse.redirect(`${requestUrl.origin}/login?error=auth_error`)
+    }
+  }
 
-        if (!error) {
-            return redirect(next);
-        }
-    }
-
-    return redirect('/login?error=Could not verify your email address.');
+  return NextResponse.redirect(`${requestUrl.origin}/profile`)
 }
