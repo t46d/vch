@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // يمكن إضافة إعدادات مثل images, headers, etc. هنا
+  reactStrictMode: true,
+  images: {
+    unoptimized: true,
+    domains: ['your-supabase-project.supabase.co']
+  }
 };
 
-export default nextConfig;
+module.exports = nextConfig;
