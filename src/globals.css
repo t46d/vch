@@ -1,199 +1,397 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ============================================
+   VEXACHAT HOME PAGE STYLES (Main Design)
+   ============================================ */
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+.vexachat-home {
+  position: relative;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-html,
-body,
-#__next {
+/* Animated Background */
+.animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
+  z-index: -2;
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(0, 240, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(255, 0, 200, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(181, 0, 255, 0.1) 0%, transparent 50%);
+  animation: backgroundPulse 10s ease-in-out infinite;
 }
 
-body {
-  background: #0A0A0A;
-  color: #EAEAEA;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@keyframes backgroundPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+/* Floating Particles */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
 }
 
-::-webkit-scrollbar-track {
-  background: rgba(10, 10, 10, 0.5);
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #00F0FF, #FF00C8);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #00F0FF, #B500FF);
-}
-
-::selection {
-  background: rgba(0, 240, 255, 0.3);
-  color: #FFFFFF;
-}
-
-::-moz-selection {
-  background: rgba(0, 240, 255, 0.3);
-  color: #FFFFFF;
-}
-
-.glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-}
-
-.glass-strong {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
-}
-
-.gradient-text {
-  background: linear-gradient(135deg, #00F0FF, #FF00C8, #B500FF);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: gradient-shift 8s ease infinite;
-}
-
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(0, 240, 255, 0.6);
+  border-radius: 50%;
+  animation: float 20s infinite;
 }
 
 @keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-@keyframes glow {
   0% {
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    transform: translateY(100vh) translateX(0);
+    opacity: 0;
   }
-  50% {
-    box-shadow: 0 0 40px rgba(255, 0, 200, 0.8);
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
   }
   100% {
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
-  }
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in {
-  from {
+    transform: translateY(-100vh) translateX(100px);
     opacity: 0;
   }
-  to {
-    opacity: 1;
-  }
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+/* Header */
+.vexachat-home header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  backdrop-filter: blur(20px);
+  background: rgba(10, 10, 10, 0.7);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  z-index: 1000;
+  padding: 1rem 2rem;
 }
 
-.animate-glow {
-  animation: glow 2s ease-in-out infinite;
-}
-
-.animate-slide-up {
-  animation: slide-up 0.5s ease-out;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out;
-}
-
-.neon-text {
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.8),
-    0 0 20px rgba(0, 240, 255, 0.6),
-    0 0 30px rgba(0, 240, 255, 0.4);
-}
-
-.neon-text-pink {
-  text-shadow: 0 0 10px rgba(255, 0, 200, 0.8),
-    0 0 20px rgba(255, 0, 200, 0.6),
-    0 0 30px rgba(255, 0, 200, 0.4);
-}
-
-.container {
+.vexachat-home .header-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 0 1rem;
-  }
+.vexachat-home .logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #00F0FF, #FF00C8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+  letter-spacing: 2px;
 }
 
-.grid-auto-fit {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+.vexachat-home nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.vexachat-home nav a {
+  color: #EAEAEA;
+  text-decoration: none;
+  transition: all 0.3s;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  position: relative;
+  font-weight: 500;
+}
+
+.vexachat-home nav a::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00F0FF, #FF00C8);
+  transition: all 0.3s;
+  transform: translateX(-50%);
+}
+
+.vexachat-home nav a:hover::before {
+  width: 100%;
+}
+
+.vexachat-home nav a:hover {
+  color: #00F0FF;
+}
+
+.vexachat-home nav a.signup-btn {
+  background: linear-gradient(135deg, #00F0FF, #FF00C8);
+  color: #0A0A0A !important;
+  font-weight: 700;
+  padding: 0.6rem 1.8rem;
+  border-radius: 8px;
+  transition: all 0.3s;
+  border: none;
+}
+
+.vexachat-home nav a.signup-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 240, 255, 0.3);
+}
+
+.vexachat-home nav a.signup-btn::before {
+  display: none;
+}
+
+/* Hero Section */
+.vexachat-home .hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+}
+
+.vexachat-home .hero-content {
+  max-width: 1200px;
+  text-align: center;
+  z-index: 1;
+}
+
+.vexachat-home .hero h1 {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #00F0FF 0%, #FF00C8 50%, #B500FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientShift 8s ease infinite;
+  background-size: 200% 200%;
+  line-height: 1.1;
+  letter-spacing: -2px;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.vexachat-home .hero p {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: #9AA0A6;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.vexachat-home .cta-buttons {
+  display: flex;
   gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(0, 240, 255, 0.2);
-  border-top: 4px solid #00F0FF;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.vexachat-home .btn {
+  padding: 1.2rem 3rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
+.vexachat-home .btn-primary {
+  background: linear-gradient(135deg, #00F0FF, #FF00C8);
+  color: #0A0A0A;
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.5), 0 0 60px rgba(255, 0, 200, 0.3);
+}
+
+.vexachat-home .btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.7), 0 0 80px rgba(255, 0, 200, 0.5);
+}
+
+.vexachat-home .btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(0, 240, 255, 0.3);
+  color: #00F0FF;
+  backdrop-filter: blur(10px);
+}
+
+.vexachat-home .btn-secondary:hover {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: #00F0FF;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+/* Features Section */
+.vexachat-home .features {
+  padding: 6rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.vexachat-home .features h2 {
+  text-align: center;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: 4rem;
+  background: linear-gradient(135deg, #00F0FF, #B500FF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.vexachat-home .features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.vexachat-home .feature-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 20px;
+  padding: 2.5rem;
+  backdrop-filter: blur(20px);
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+
+.vexachat-home .feature-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.vexachat-home .feature-card:hover::before {
+  opacity: 1;
+}
+
+.vexachat-home .feature-card:hover {
+  transform: translateY(-10px);
+  border-color: #00F0FF;
+  box-shadow: 0 20px 60px rgba(0, 240, 255, 0.2);
+}
+
+.vexachat-home .feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+}
+
+.vexachat-home .feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #00F0FF;
+}
+
+.vexachat-home .feature-card p {
+  color: #9AA0A6;
+  line-height: 1.6;
+}
+
+/* Stats Section */
+.vexachat-home .stats {
+  padding: 4rem 2rem;
+  background: rgba(0, 240, 255, 0.02);
+  border-top: 1px solid rgba(0, 240, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+}
+
+.vexachat-home .stats-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 3rem;
+  text-align: center;
+}
+
+.vexachat-home .stat-item h3 {
+  font-size: 3rem;
+  background: linear-gradient(135deg, #00F0FF, #FF00C8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.vexachat-home .stat-item p {
+  color: #9AA0A6;
+  font-size: 1.1rem;
+}
+
+/* Footer */
+.vexachat-home footer {
+  padding: 3rem 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(0, 240, 255, 0.1);
+  background: rgba(10, 10, 10, 0.8);
+}
+
+.vexachat-home footer p {
+  color: #9AA0A6;
+  margin-bottom: 1rem;
+}
+
+.vexachat-home footer a {
+  color: #00F0FF;
+  text-decoration: none;
+  margin: 0 1rem;
+  transition: color 0.3s;
+}
+
+.vexachat-home footer a:hover {
+  color: #FF00C8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .vexachat-home .header-content {
+    flex-direction: column;
+    gap: 1rem;
   }
-  100% {
-    transform: rotate(360deg);
+
+  .vexachat-home nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .vexachat-home .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .vexachat-home .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .vexachat-home .features-grid {
+    grid-template-columns: 1fr;
   }
 }
