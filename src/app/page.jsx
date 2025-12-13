@@ -2,27 +2,28 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[90vh] bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4">
-      <main className="max-w-4xl w-full text-center">
-        <h1 className="text-6xl font-extrabold mb-4 tracking-tight">
-          VeXachat
-        </h1>
-        <p className="text-xl mb-8 text-gray-600 dark:text-gray-400">
-          تواصل فوراً وبشكل آمن. انضم إلى المجتمع الذي يلبي احتياجاتك.
-        </p>
-        <div className="flex justify-center space-x-4">
-          <Link href="/signup" passHref>
-            <button className="px-8 py-3 text-lg font-semibold rounded-lg shadow-lg bg-indigo-600 hover:bg-indigo-700 text-white transition duration-300">
-              ابدأ الآن
-            </button>
-          </Link>
-          <Link href="/discover" passHref>
-            <button className="px-8 py-3 text-lg font-semibold rounded-lg shadow-lg bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition duration-300">
-              اكتشف المجتمعات
-            </button>
-          </Link>
-        </div>
-      </main>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white px-4">
+      <h1 className="text-6xl font-bold gradient-text mb-6">
+        VeXachat
+      </h1>
+      <p className="text-2xl text-gray-400 mb-8 text-center max-w-2xl">
+        Experience the future of social dating with AI-powered matching and immersive chat experiences
+      </p>
+      
+      <div className="flex gap-4">
+        <Link 
+          href="/signup"
+          className="px-8 py-3 bg-gradient-neon text-black font-bold rounded-lg shadow-neon hover:scale-105 transition-transform"
+        >
+          Get Started Free
+        </Link>
+        <Link 
+          href="/login"
+          className="px-8 py-3 glass text-white font-bold rounded-lg hover:scale-105 transition-transform"
+        >
+          Sign In
+        </Link>
+      </div>
     </div>
   );
 }
