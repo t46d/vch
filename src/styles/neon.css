@@ -1,0 +1,67 @@
+/* src/styles/neon.css
+
+   ›∆«  CSS „Œ’’… · √ÀÌ—«  «·‰ÌÊ‰ Ê«· ÊÂÃ «·„⁄ﬁœ…
+*/
+
+/* «” Ì—«œ «·„ €Ì—«  «·√”«”Ì… */
+@import './theme.css';
+
+/* ============================================
+    √ÀÌ— «· ÊÂÃ «·‰’Ì (Neon Text Glow)
+   ============================================ */
+
+.text-glow {
+  text-shadow: 
+    0 0 5px var(--c-electric), 
+    0 0 10px var(--c-electric),
+    0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+.text-glow-pink {
+  text-shadow: 
+    0 0 5px var(--c-pink), 
+    0 0 10px var(--c-pink),
+    0 0 20px rgba(255, 0, 200, 0.4);
+}
+
+/* ============================================
+   «·ÕœÊœ «·„ ÊÂÃ… «·„ ⁄œœ… (Multi-Color Neon Border)
+   ============================================ */
+
+.border-neon-multi {
+  border: 1px solid var(--c-electric);
+  box-shadow: 
+    0 0 15px rgba(0, 240, 255, 0.5), /* Cyan Glow */
+    0 0 30px rgba(255, 0, 200, 0.3), /* Pink Glow */
+    inset 0 0 8px rgba(0, 240, 255, 0.2);
+  transition: all 0.4s ease;
+}
+
+.border-neon-multi:hover {
+  border-color: var(--c-pink);
+  box-shadow: 
+    0 0 20px rgba(255, 0, 200, 0.7), /* Strong Pink Glow */
+    0 0 40px rgba(181, 0, 255, 0.4), /* Violet Glow */
+    inset 0 0 10px rgba(255, 0, 200, 0.4);
+}
+
+/* ============================================
+   «·Œ·›Ì… «·„ ÊÂÃ… (Glow Background)
+   ============================================ */
+
+.bg-neon-pulse {
+  background-color: var(--c-background-dark);
+  animation: pulse-glow-bg 3s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow-bg {
+  0% {
+    box-shadow: 0 0 5px var(--c-electric);
+  }
+  50% {
+    box-shadow: 0 0 25px var(--c-pink);
+  }
+  100% {
+    box-shadow: 0 0 5px var(--c-electric);
+  }
+}

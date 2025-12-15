@@ -1,0 +1,95 @@
+# ============================================
+# VeXachat Project - .gitignore
+# ============================================
+
+# 🔧 DEPENDENCIES
+node_modules/
+.pnp
+.pnp.js
+.pnp.cjs
+.yarn/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 📦 BUILD OUTPUTS
+.next/
+out/
+dist/
+build/
+.vercel/
+
+# 🔐 ENVIRONMENT & SECURITY
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+.env.local
+*.key
+*.pem
+*.crt
+
+# 🗄️ DATABASE & LOCAL STORAGE
+*.db
+*.sqlite
+*.sqlite3
+supabase/local/
+.local-supabase/
+.supabase/
+
+# 🖥️ SYSTEM FILES
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# 🔍 IDE & EDITOR
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 📝 NEXT.JS SPECIFIC
+.next/cache/
+.next/standalone/
+.next/server/
+.next/static/
+.next/build-manifest.json
+.next/prerender-manifest.json
+.next/react-loadable-manifest.json
+.next/server/next-font-manifest.json
+.next/server/webpack-runtime.js
+next-env.d.ts
+
+# 🎨 TAILWIND CSS
+.tailwindcss
+.postcss
+
+# 📊 COVERAGE & TESTING
+coverage/
+.nyc_output/
+*.lcov
+
+# 🗂️ TYPESCRIPT
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# 🚀 DEPLOYMENT
+.netlify/
+.vercel/
+.netlify/functions/
+.netlify/edge-functions/
+
+# 📄 MISC
+*.pid
+*.seed
+*.pid.lock
+.cache/
+.tmp/
+temp/
+dump.rdb
+*.bak
+*.backup

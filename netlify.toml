@@ -1,0 +1,16 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  # 🔒 أضف هذه المتغيرات في Netlify Dashboard فقط!
+  # لا تضع أي مفاتيح هنا في الملف
+  
+  # إعدادات Node.js
+  NODE_VERSION = "18"
+
+  # إعدادات Next.js
+  NEXT_TELEMETRY_DISABLED = "1"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
