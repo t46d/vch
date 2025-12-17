@@ -10,7 +10,6 @@ const nextConfig = {
       },
     ],
   },
-  // لتحسين SVG
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
