@@ -1,7 +1,29 @@
 {
+  "name": "vexachat",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.2.35",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@supabase/supabase-js": "^2.43.3",
+    "@supabase/ssr": "^0.4.0",
+    "@supabase/auth-ui-react": "^0.4.3",
+    "@supabase/auth-ui-shared": "^0.1.4"
+  },
   "devDependencies": {
     "tailwindcss": "^3.4.4",
     "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38"
+    "postcss": "^8.4.38",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.5",
+    "@svgr/webpack": "^8.1.0"
   }
 }
