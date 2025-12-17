@@ -1,0 +1,225 @@
+# ============================================
+# VeXachat.world - Professional robots.txt
+# Advanced Social Dating Platform
+# ============================================
+
+# Primary Directives for All Respectful Crawlers
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /private/
+Disallow: /secure/
+Disallow: /backend/
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.log$
+Disallow: /*.env$
+Disallow: /*.config$
+Disallow: /*/edit$
+Disallow: /*/delete$
+Disallow: /*/settings$
+Disallow: /*/password$
+Disallow: /*/payment/
+Disallow: /*/billing/
+Disallow: /*/invoice/
+Disallow: /*/transaction/
+Disallow: /_next/static/
+Crawl-delay: 2
+
+# ============================================
+# SEARCH ENGINE SPECIFIC RULES
+# ============================================
+
+# Google (Primary)
+User-agent: Googlebot
+Allow: /
+Allow: /discover/
+Allow: /profile/*
+Allow: /user/*
+Disallow: /api/
+Disallow: /admin/
+Disallow: /*/messages/
+Disallow: /*/chat/
+Disallow: /*/conversation/
+Crawl-delay: 1
+Request-rate: 1/2 # 1 request per 2 seconds
+
+# Google Images
+User-agent: Googlebot-Image
+Allow: /public/uploads/images/
+Allow: /public/assets/images/
+Disallow: /private/uploads/
+Disallow: /user/uploads/
+Disallow: /profile/pictures/
+
+# Bing
+User-agent: bingbot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Crawl-delay: 3
+
+# Yandex
+User-agent: YandexBot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Clean-param: ref /user/
+Clean-param: session /discover/
+Crawl-delay: 4
+
+# Baidu
+User-agent: Baiduspider
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Crawl-delay: 5
+
+# ============================================
+# AI & DATA SCRAPER BLOCKING
+# ============================================
+
+# OpenAI
+User-agent: GPTBot
+Disallow: /
+User-agent: ChatGPT-User
+Disallow: /
+
+# Anthropic (Claude)
+User-agent: Claude-Web
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+
+# Google AI
+User-agent: Google-Extended
+Disallow: /
+
+# Common AI Scrapers
+User-agent: CCBot
+Disallow: /
+User-agent: FacebookBot
+Disallow: /
+User-agent: Applebot-Extended
+Disallow: /
+User-agent: OAI-Mozilla-AI-Crawler
+Disallow: /
+
+# Data Mining Bots
+User-agent: SemrushBot
+Disallow: /
+User-agent: AhrefsBot
+Disallow: /
+User-agent: MJ12bot
+Disallow: /
+User-agent: DotBot
+Disallow: /
+User-agent: MojeekBot
+Disallow: /
+User-agent: BLEXBot
+Disallow: /
+User-agent: DataForSeoBot
+Disallow: /
+
+# ============================================
+# SITEMAP REFERENCES
+# ============================================
+
+Sitemap: https://vexachat.world/sitemap.xml
+Sitemap: https://vexachat.world/sitemap-static.xml
+Sitemap: https://vexachat.world/sitemap-users.xml
+Sitemap: https://vexachat.world/sitemap-profiles.xml
+Sitemap: https://www.vexachat.world/sitemap.xml
+
+# ============================================
+# ADDITIONAL TECHNICAL RULES
+# ============================================
+
+# Block Bad Bots
+User-agent: 80Legs
+Disallow: /
+User-agent: BLEXBot
+Disallow: /
+User-agent: rogerbot
+Disallow: /
+User-agent: exabot
+Disallow: /
+User-agent: aiHitBot
+Disallow: /
+User-agent: SiteExplorer
+Disallow: /
+User-agent: ltx71
+Disallow: /
+
+# Allow Good Bots
+User-agent: LinkedInBot
+Allow: /
+Disallow: /api/
+Crawl-delay: 2
+
+User-agent: Twitterbot
+Allow: /
+Allow: /profile/*
+
+# ============================================
+# SITE-SPECIFIC RULES FOR VEXACHAT
+# ============================================
+
+# Allow public pages
+Allow: /discover
+Allow: /features
+Allow: /pricing
+Allow: /about
+Allow: /contact
+Allow: /blog
+Allow: /help
+Allow: /terms
+Allow: /privacy
+Allow: /community
+
+# Block sensitive user areas
+Disallow: /messages
+Disallow: /notifications
+Disallow: /matches
+Disallow: /favorites
+Disallow: /likes
+Disallow: /blocked
+Disallow: /reports
+Disallow: /verification
+Disallow: /subscription
+Disallow: /wallet
+Disallow: /gifts
+Disallow: /history
+
+# Block specific patterns
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?search=
+Disallow: /*?page=
+Disallow: /*?token=
+Disallow: /*?auth=
+Disallow: /*?redirect=
+Disallow: /*?ref=
+Disallow: /*?utm_
+
+# ============================================
+# METADATA & CONTACT
+# ============================================
+
+# Generated: 2024-12-14
+# Version: 2.0.0
+# Platform: VeXachat Social Dating
+# Contact: support@vexachat.world
+# Documentation: https://vexachat.world/help/seo
+# Review Frequency: Monthly
+# Last Review: 2024-12-14
+
+# ============================================
+# ADDITIONAL HEADERS (For server config)
+# ============================================
+
+# X-Robots-Tag: index, follow, max-snippet:150, max-image-preview:large
+# Cache-Control: public, max-age=86400
+# Content-Type: text/plain; charset=utf-8
