@@ -8,12 +8,15 @@ const supabase = createClient();
  * @param {string} password
  */
 export async function signUp({ email, password }) {
+  // الحل: استخدام window.location.origin فقط إذا كنا في المتصفح
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      // إعادة توجيه المستخدم إلى صفحة التحقق بعد التسجيل
-      emailRedirectTo: `${location.origin}/auth/callback`,
+      // استخدام الأصل الديناميكي
+      emailRedirectTo: `${origin}/auth/callback`,
     },
   });
 
