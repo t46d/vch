@@ -34,7 +34,6 @@ export function createClient(request) {
   return { supabase, response }
 }
 
-// هذا السطر يحل مشكلة Edge Runtime
 export const config = {
   runtime: 'nodejs'
 }
