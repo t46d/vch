@@ -1,105 +1,187 @@
-/* src/globals.css - النسخة الأساسية */
+/* src/app/globals.css - النسخة المصححة */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ===== CSS الأساسي ===== */
-:root {
-  --electric: #00F0FF;
-  --neon-pink: #FF00C8;
-  --dark-bg: #0A0A0A;
+@layer base {
+  :root {
+    --electric: #00F0FF;
+    --neon-pink: #FF00C8;
+    --dark-bg: #0A0A0A;
+  }
+
+  * {
+    @apply box-border m-0 p-0;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-dark-900 text-gray-100 font-sans min-h-screen;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer components {
+  /* ===== تصميم الزجاجي ===== */
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+
+  .glass-strong {
+    @apply bg-white/8 backdrop-blur-2xl border border-white/15;
+  }
+
+  /* ===== النص المتدرج ===== */
+  .gradient-text {
+    @apply bg-gradient-to-r from-electric to-neon-pink bg-clip-text text-transparent;
+  }
+
+  /* ===== الأزرار ===== */
+  .btn-primary {
+    @apply bg-gradient-to-r from-electric to-neon-pink text-dark-900 font-bold 
+           rounded-xl px-6 py-3 transition-all duration-300 
+           hover:shadow-neon hover:-translate-y-0.5
+           active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply glass text-white font-medium rounded-xl px-6 py-3 
+           transition-all duration-300 hover:bg-white/10
+           border border-white/20;
+  }
+
+  /* ===== حقول الإدخال ===== */
+  .form-input {
+    @apply glass rounded-xl px-4 py-3 text-white w-full
+           placeholder:text-gray-400 focus:outline-none 
+           focus:ring-2 focus:ring-electric focus:border-transparent
+           transition-all duration-200;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-gray-300 mb-2;
+  }
+
+  /* ===== البطاقات ===== */
+  .card {
+    @apply glass rounded-2xl p-6 transition-all duration-300 
+           hover:glass-strong hover:shadow-neon;
+  }
+
+  /* ===== شريط التنقل ===== */
+  .nav-link {
+    @apply text-gray-300 hover:text-electric transition-colors 
+           duration-200 px-4 py-2 rounded-lg hover:bg-white/5;
+  }
+
+  .nav-link-active {
+    @apply text-electric bg-electric/10;
+  }
 }
 
-body {
-  background: var(--dark-bg);
-  color: #EAEAEA;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  min-height: 100vh;
+@layer utilities {
+  /* ===== الخلفيات ===== */
+  .bg-gradient-cyber {
+    @apply bg-gradient-to-r from-electric via-neon-pink to-violet-600;
+  }
+
+  .bg-gradient-neon {
+    @apply bg-gradient-to-r from-electric to-neon-pink;
+  }
+
+  .bg-gradient-dark {
+    @apply bg-gradient-to-br from-dark-950 via-dark-900 to-dark-800;
+  }
+
+  /* ===== الظلال ===== */
+  .shadow-neon {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5), 
+                0 0 40px rgba(255, 0, 200, 0.3);
+  }
+
+  .shadow-neon-pink {
+    box-shadow: 0 0 20px rgba(255, 0, 200, 0.5);
+  }
+
+  .shadow-glass {
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  }
+
+  /* ===== الرسوم المتحركة ===== */
+  .animate-gradient {
+    animation: gradient 8s linear infinite;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
 }
 
-/* ===== فئات VeXachat الأساسية ===== */
-.glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* ===== Keyframes للرسوم المتحركة ===== */
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
-.glass-strong {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #00F0FF, #FF00C8);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(255, 0, 200, 0.8);
+  }
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #00F0FF, #FF00C8);
-  color: #0A0A0A;
-  font-weight: 700;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
-}
-
-.form-input {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  padding: 14px 16px;
-  color: white;
-  width: 100%;
-  font-size: 16px;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #00F0FF;
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-}
-
-/* ===== أنماط صفحة التسجيل ===== */
-.login-page {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0A0A0A 0%, #151515 50%, #202020 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.login-container {
-  width: 100%;
-  max-width: 420px;
-  padding: 40px;
-  border-radius: 20px;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-  .login-container {
-    padding: 30px 20px;
+/* ===== Responsive Utilities ===== */
+@media (max-width: 640px) {
+  .mobile-center {
+    @apply text-center justify-center items-center;
   }
   
-  .btn-primary {
-    padding: 14px 20px;
+  .mobile-full {
+    @apply w-full;
+  }
+}
+
+/* ===== تحسينات الوصول ===== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== تحسينات الطباعة ===== */
+@media print {
+  .glass, .glass-strong {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    backdrop-filter: none !important;
+  }
+  
+  .gradient-text {
+    color: black !important;
+    background: none !important;
   }
 }
