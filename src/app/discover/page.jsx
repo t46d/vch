@@ -3,30 +3,36 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
-import { Search, Heart, MessageSquare, ArrowLeft } from 'lucide-react';
+import { Search, Heart, MessageSquare, ArrowLeft, UserPlus, LogOut } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DiscoverPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isGuest, setIsGuest] = useState(false);
   const supabase = createClient();
   const router = useRouter();
 
   useEffect(() => {
-    fetchUsers();
+    checkAuthAndFetchUsers();
   }, []);
 
-  async function fetchUsers() {
+  async function checkAuthAndFetchUsers() {
     setLoading(true);
     const { data: { user } } = await supabase.auth.getUser();
-   
+
+    // Check if user is anonymous (guest)
+    if (user?.is_anonymous) {
+      setIsGuest(true);
+    }
+
     let query = supabase
       .from('profiles')
       .select('id, name, bio, interests, age')
       .order('created_at', { ascending: false });
 
-    if (user) {
+    if (user && !user.is_anonymous) {
       query = query.neq('user_id', user.id);
     }
 
@@ -36,11 +42,51 @@ export default function DiscoverPage() {
     setLoading(false);
   }
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push('/login');
+    router.refresh();
+  };
+
   const filteredUsers = users
     .filter(u => u.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] pt-24 pb-12 px-4 md:px-8">
+      {/* Guest Banner */}
+      {isGuest && (
+        <div className="container max-w-6xl mb-6 animate-fade-in">
+          <div className="glass rounded-xl p-4 border border-cyan-500/30 bg-cyan-500/5">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-cyan-500/20 rounded-lg">
+                  <UserPlus size={20} className="text-cyan-400" />
+                </div>
+                <div>
+                  <p className="text-white font-medium">أنت تتصفح كضيف</p>
+                  <p className="text-gray-400 text-sm">أنشئ حسابًا للتواصل مع المستخدمين الآخرين</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/signup"
+                  className="px-4 py-2 bg-gradient-neon text-black font-bold rounded-lg hover:scale-105 transition-transform"
+                >
+                  إنشاء حساب
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center gap-2 px-4 py-2 glass text-gray-300 rounded-lg hover:bg-white/10 transition-colors"
+                >
+                  <LogOut size={18} />
+                  خروج
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header & Search */}
       <div className="container max-w-6xl mb-12 animate-fade-in">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -50,9 +96,15 @@ export default function DiscoverPage() {
           </div>
           
           <div className="flex items-center gap-4">
-            <Link href="/profile" className="p-3 glass rounded-xl hover:bg-white/10 transition-colors">
-              <ArrowLeft size={20} className="text-white" />
-            </Link>
+            {isGuest ? (
+              <Link href="/login" className="p-3 glass rounded-xl hover:bg-white/10 transition-colors">
+                <ArrowLeft size={20} className="text-white" />
+              </Link>
+            ) : (
+              <Link href="/profile" className="p-3 glass rounded-xl hover:bg-white/10 transition-colors">
+                <ArrowLeft size={20} className="text-white" />
+              </Link>
+            )}
             <div className="relative group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-electric transition-colors" size={20} />
               <input
