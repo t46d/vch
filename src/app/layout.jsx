@@ -7,7 +7,12 @@ export const metadata = {
   keywords: ['chat', 'dating', 'social', 'adult', 'messaging', '18+'],
   authors: [{ name: 'VeXaChat Team' }],
   robots: 'index, follow',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
   themeColor: '#FF00C8',
 };
 

@@ -31,7 +31,7 @@
   }
 
   .glass-strong {
-    @apply bg-white/8 backdrop-blur-2xl border border-white/15;
+    @apply bg-white/10 backdrop-blur-2xl border border-white/20;
   }
 
   /* ===== النص المتدرج ===== */

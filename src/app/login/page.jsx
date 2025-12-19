@@ -10,6 +10,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -30,6 +31,21 @@ export default function LoginPage() {
       router.refresh();
     }
     setLoading(false);
+  };
+
+  const handleGuestLogin = async () => {
+    setError(null);
+    setGuestLoading(true);
+
+    const { error } = await supabase.auth.signInAnonymously();
+
+    if (error) {
+      setError(error.message);
+    } else {
+      router.push('/discover');
+      router.refresh();
+    }
+    setGuestLoading(false);
   };
 
   return (
@@ -88,6 +104,28 @@ export default function LoginPage() {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+
+        {/* Divider */}
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-700"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-4 bg-gray-900/50 text-gray-400">أو</span>
+          </div>
+        </div>
+
+        {/* Guest Login Button */}
+        <button
+          onClick={handleGuestLogin}
+          disabled={guestLoading}
+          className="w-full py-3 border border-cyan-500/50 text-cyan-400 rounded-lg hover:bg-cyan-500/10 transition-all duration-300 font-medium"
+        >
+          {guestLoading ? 'جاري الدخول...' : 'الدخول كضيف'}
+        </button>
+        <p className="text-gray-500 text-xs text-center mt-2">
+          تصفح الملفات الشخصية بدون حساب
+        </p>
 
         <div className="mt-6 text-center">
           <p className="text-gray-400 text-sm">
