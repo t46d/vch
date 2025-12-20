@@ -10,6 +10,7 @@ export default function DiscoverPage() {
   const [users, setUsers] = useState([]);
   const [nearbyOnly, setNearbyOnly] = useState(false);
   const [myLocation, setMyLocation] = useState(null);
+  const [distanceKm, setDistanceKm] = useState(50);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isGuest, setIsGuest] = useState(false);
@@ -96,7 +97,7 @@ export default function DiscoverPage() {
     return { ...u, distance };
   });
 
-  const displayedUsers = nearbyOnly ? withDistance.filter(u => u.distance !== null && u.distance <= 50) : withDistance;
+  const displayedUsers = nearbyOnly ? withDistance.filter(u => u.distance !== null && u.distance <= distanceKm) : withDistance;
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] pt-24 pb-12 px-4 md:px-8">
@@ -152,9 +153,16 @@ export default function DiscoverPage() {
                 <ArrowLeft size={20} className="text-white" />
               </Link>
             )}
-            <div className="flex items-center gap-2">
-              <label className="text-sm text-gray-300">قريب</label>
-              <input type="checkbox" checked={nearbyOnly} onChange={(e) => setNearbyOnly(e.target.checked)} className="w-5 h-5" />
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-gray-300">قريب</label>
+                <input type="checkbox" checked={nearbyOnly} onChange={(e) => setNearbyOnly(e.target.checked)} className="w-5 h-5" />
+              </div>
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-gray-300">نطاق (كم):</label>
+                <input type="range" min="5" max="200" value={distanceKm} onChange={(e) => setDistanceKm(Number(e.target.value))} className="w-40" />
+                <span className="text-sm text-gray-300">{distanceKm} km</span>
+              </div>
             </div>
             <div className="relative group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-electric transition-colors" size={20} />
