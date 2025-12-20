@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/context/ToastContext';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -11,6 +12,7 @@ export default function LoginForm() {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const { addToast } = useToast();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -24,13 +26,17 @@ export default function LoginForm() {
 
       if (error) {
         setError(error.message || 'Failed to sign in.');
+        addToast(error.message || 'فشل تسجيل الدخول', 'error');
       } else {
+        addToast('تم تسجيل الدخول', 'success');
         router.push('/profile');
         router.refresh();
       }
     } catch (err) {
       console.error('Sign in error:', err);
-      setError(err?.message || 'حدث خطأ أثناء محاولة تسجيل الدخول.');
+      const msg = err?.message || 'حدث خطأ أثناء محاولة تسجيل الدخول.';
+      setError(msg);
+      addToast(msg, 'error');
     } finally {
       setIsSigningIn(false);
     }

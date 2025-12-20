@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from '@/context/ToastContext';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -13,24 +14,35 @@ export default function LoginPage() {
   const [guestLoading, setGuestLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const { addToast } = useToast();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      setError(error.message);
-    } else {
-      router.push('/profile');
-      router.refresh();
+      if (error) {
+        setError(error.message);
+        addToast(error.message, 'error');
+      } else {
+        addToast('تم تسجيل الدخول', 'success');
+        router.push('/profile');
+        router.refresh();
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      const msg = err?.message || 'حدث خطأ أثناء تسجيل الدخول.';
+      setError(msg);
+      addToast(msg, 'error');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleGuestLogin = async () => {
@@ -50,7 +62,9 @@ export default function LoginPage() {
       }
     } catch (err) {
       console.error('Guest login error:', err);
-      setError(err?.message || 'حدث خطأ أثناء الدخول كضيف.');
+      const msg = err?.message || 'حدث خطأ أثناء الدخول كضيف.';
+      setError(msg);
+      addToast(msg, 'error');
     } finally {
       setGuestLoading(false);
     }
