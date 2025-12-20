@@ -16,18 +16,23 @@ export default function LoginForm() {
     e.preventDefault();
     setError(null);
     setIsSigningIn(true);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setError(error.message);
+      if (error) {
+        setError(error.message || 'Failed to sign in.');
+      } else {
+        router.push('/profile');
+        router.refresh();
+      }
+    } catch (err) {
+      console.error('Sign in error:', err);
+      setError(err?.message || 'حدث خطأ أثناء محاولة تسجيل الدخول.');
+    } finally {
       setIsSigningIn(false);
-    } else {
-      router.push('/profile');
-      router.refresh();
     }
   };
 

@@ -30,39 +30,54 @@ export async function getConversations() {
 
   // جلب المحادثات التي يكون المستخدم الحالي إما الطرف الأول (profile1) أو الثاني (profile2) فيها.
   // يتم جلب اسم وصورة الطرف الآخر مع آخر رسالة.
-  const { data, error } = await supabase
+  const { data: convs, error } = await supabase
     .from('conversations')
     .select(
-      `
-        id, 
-        created_at,
-        profile1:profile_id1 (id, name, avatar_url),
-        profile2:profile_id2 (id, name, avatar_url),
-        latest_message:messages(content, created_at, sender_id)
-      `
+      `id, created_at, profile_id1, profile_id2`
     )
     .or(`profile_id1.eq.${myProfileId},profile_id2.eq.${myProfileId}`)
-    .order('created_at', { foreignTable: 'messages', ascending: false })
-    .limit(1, { foreignTable: 'messages' });
-
+    .order('created_at', { ascending: false });
 
   if (error) {
     console.error('Error fetching conversations:', error);
     return { conversations: [], error: error.message };
   }
 
-  // معالجة البيانات لتحديد الطرف الآخر (The Other Party)
-  const conversations = data.map(conv => {
-    const otherParty = conv.profile1.id === myProfileId ? conv.profile2 : conv.profile1;
-    const latestMessage = conv.latest_message ? conv.latest_message[0] : null;
-    
-    return {
+  // للحصول على بيانات الملف الشخصي والطرف الآخر وآخر رسالة لكل محادثة، نجري استدعاءات إضافية
+  const conversations = [];
+  for (const conv of convs) {
+    // احضر بيانات ملفات الطرفين
+    const { data: profiles, error: profilesError } = await supabase
+      .from('profiles')
+      .select('id, name, avatar_url')
+      .in('id', [conv.profile_id1, conv.profile_id2]);
+
+    if (profilesError) {
+      console.error('Error fetching profiles for conversation:', profilesError);
+      continue;
+    }
+
+    const profile1 = profiles.find(p => p.id === conv.profile_id1) || null;
+    const profile2 = profiles.find(p => p.id === conv.profile_id2) || null;
+    const otherParty = profile1 && profile1.id === myProfileId ? profile2 : profile1;
+
+    // آخر رسالة
+    const { data: latestMsgs, error: latestError } = await supabase
+      .from('messages')
+      .select('id, content, created_at, sender_id')
+      .eq('conversation_id', conv.id)
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    const latestMessage = (latestMsgs && latestMsgs[0]) || null;
+
+    conversations.push({
       id: conv.id,
       otherParty,
       latestMessage,
       created_at: conv.created_at,
-    };
-  });
+    });
+  }
 
   return { conversations, error: null };
 }

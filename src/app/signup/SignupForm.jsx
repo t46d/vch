@@ -16,17 +16,21 @@ export default function SignupForm() {
     e.preventDefault();
     setError(null);
     setLoading(true);
+    try {
+      const { error: authError } = await signUp({ email, password });
 
-    const { error: authError } = await signUp({ email, password });
-
-    if (authError) {
-      setError(authError.message || 'حدث خطأ أثناء التسجيل.');
-    } else {
-      alert('تم إرسال رابط تأكيد إلى بريدك الإلكتروني. يرجى التحقق.');
-      router.push('/login');
+      if (authError) {
+        setError(authError.message || 'حدث خطأ أثناء التسجيل.');
+      } else {
+        alert('تم إرسال رابط تأكيد إلى بريدك الإلكتروني. يرجى التحقق.');
+        router.push('/login');
+      }
+    } catch (err) {
+      console.error('Signup error:', err);
+      setError(err?.message || 'حدث خطأ أثناء التسجيل.');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (

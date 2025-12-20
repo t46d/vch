@@ -36,16 +36,24 @@ export default function LoginPage() {
   const handleGuestLogin = async () => {
     setError(null);
     setGuestLoading(true);
-
-    const { error } = await supabase.auth.signInAnonymously();
-
-    if (error) {
-      setError(error.message);
-    } else {
-      router.push('/discover');
-      router.refresh();
+    try {
+      // Some Supabase clients don't expose signInAnonymously; guard and fallback
+      if (supabase?.auth && typeof supabase.auth.signInAnonymously === 'function') {
+        const { error: anonError } = await supabase.auth.signInAnonymously();
+        if (anonError) throw anonError;
+        router.push('/discover');
+        router.refresh();
+      } else {
+        // Fallback: allow browsing discover as guest without auth
+        console.warn('Anonymous sign-in not available, falling back to guest navigation');
+        router.push('/discover');
+      }
+    } catch (err) {
+      console.error('Guest login error:', err);
+      setError(err?.message || 'حدث خطأ أثناء الدخول كضيف.');
+    } finally {
+      setGuestLoading(false);
     }
-    setGuestLoading(false);
   };
 
   return (
