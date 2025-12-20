@@ -1,5 +1,6 @@
 import './globals.css';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { ToastProvider } from '@/context/ToastContext';
 
 export const metadata = {
   title: 'VeXaChat | Future Chat Platform',
@@ -111,7 +112,9 @@ export default function RootLayout({ children }) {
         <div className="relative z-10 min-h-screen flex flex-col pt-4">
           {/* Main Content */}
           <main className="flex-1">
-            {children}
+            <ToastProvider>
+              {children}
+            </ToastProvider>
           </main>
         </div>
         

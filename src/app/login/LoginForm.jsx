@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/context/ToastContext';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -11,23 +12,33 @@ export default function LoginForm() {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const { addToast } = useToast();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     setError(null);
     setIsSigningIn(true);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setError(error.message);
+      if (error) {
+        setError(error.message || 'Failed to sign in.');
+        addToast(error.message || 'فشل تسجيل الدخول', 'error');
+      } else {
+        addToast('تم تسجيل الدخول', 'success');
+        router.push('/profile');
+        router.refresh();
+      }
+    } catch (err) {
+      console.error('Sign in error:', err);
+      const msg = err?.message || 'حدث خطأ أثناء محاولة تسجيل الدخول.';
+      setError(msg);
+      addToast(msg, 'error');
+    } finally {
       setIsSigningIn(false);
-    } else {
-      router.push('/profile');
-      router.refresh();
     }
   };
 

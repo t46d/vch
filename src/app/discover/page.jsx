@@ -8,6 +8,9 @@ import Link from 'next/link';
 
 export default function DiscoverPage() {
   const [users, setUsers] = useState([]);
+  const [nearbyOnly, setNearbyOnly] = useState(false);
+  const [myLocation, setMyLocation] = useState(null);
+  const [distanceKm, setDistanceKm] = useState(50);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isGuest, setIsGuest] = useState(false);
@@ -17,6 +20,22 @@ export default function DiscoverPage() {
   useEffect(() => {
     checkAuthAndFetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (nearbyOnly) {
+      // request geolocation
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          setMyLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        }, (err) => {
+          console.warn('Geolocation denied or failed', err);
+          setNearbyOnly(false);
+        });
+      } else {
+        setNearbyOnly(false);
+      }
+    }
+  }, [nearbyOnly]);
 
   async function checkAuthAndFetchUsers() {
     setLoading(true);
@@ -29,7 +48,7 @@ export default function DiscoverPage() {
 
     let query = supabase
       .from('profiles')
-      .select('id, name, bio, interests, age')
+      .select('id, name, bio, interests, age, location')
       .order('created_at', { ascending: false });
 
     if (user && !user.is_anonymous) {
@@ -50,6 +69,35 @@ export default function DiscoverPage() {
 
   const filteredUsers = users
     .filter(u => u.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  // compute distances if myLocation available and profile has location
+  const withDistance = filteredUsers.map(u => {
+    let distance = null;
+    try {
+      if (myLocation && u.location) {
+        // support 'lat,lng' string or object {lat, lng}
+        let plat, plng;
+        if (typeof u.location === 'string' && u.location.includes(',')) {
+          [plat, plng] = u.location.split(',').map(Number);
+        } else if (u.location?.lat && u.location?.lng) {
+          plat = Number(u.location.lat); plng = Number(u.location.lng);
+        }
+        if (plat && plng) {
+          const R = 6371; // km
+          const dLat = (plat - myLocation.lat) * Math.PI / 180;
+          const dLon = (plng - myLocation.lng) * Math.PI / 180;
+          const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(myLocation.lat * Math.PI/180) * Math.cos(plat * Math.PI/180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+          distance = R * c;
+        }
+      }
+    } catch (e) {
+      distance = null;
+    }
+    return { ...u, distance };
+  });
+
+  const displayedUsers = nearbyOnly ? withDistance.filter(u => u.distance !== null && u.distance <= distanceKm) : withDistance;
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] pt-24 pb-12 px-4 md:px-8">
@@ -105,6 +153,17 @@ export default function DiscoverPage() {
                 <ArrowLeft size={20} className="text-white" />
               </Link>
             )}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-gray-300">قريب</label>
+                <input type="checkbox" checked={nearbyOnly} onChange={(e) => setNearbyOnly(e.target.checked)} className="w-5 h-5" />
+              </div>
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-gray-300">نطاق (كم):</label>
+                <input type="range" min="5" max="200" value={distanceKm} onChange={(e) => setDistanceKm(Number(e.target.value))} className="w-40" />
+                <span className="text-sm text-gray-300">{distanceKm} km</span>
+              </div>
+            </div>
             <div className="relative group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-electric transition-colors" size={20} />
               <input
@@ -131,15 +190,18 @@ export default function DiscoverPage() {
           </div>
         ) : (
           <div className="grid-auto-fit">
-            {filteredUsers.map((userProfile) => (
+            {displayedUsers.map((userProfile) => (
               <div key={userProfile.id} className="glass card-hover rounded-2xl overflow-hidden group">
                 {/* User Avatar Space */}
                 <div className="h-48 bg-gradient-to-br from-gray-800 to-gray-900 relative">
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
-                  <div className="absolute bottom-4 left-4">
+                  <div className="absolute bottom-4 left-4 flex items-center gap-2">
                     <span className="px-3 py-1 bg-electric/20 text-electric text-xs font-bold rounded-full backdrop-blur-md border border-electric/30">
                       {userProfile.age || '??'} YRS
                     </span>
+                    {typeof userProfile.distance === 'number' && (
+                      <span className="px-2 py-1 bg-white/5 text-sm text-gray-200 rounded-full">{userProfile.distance.toFixed(1)} km</span>
+                    )}
                   </div>
                 </div>
 

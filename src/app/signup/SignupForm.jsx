@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signUp } from '@/services/auth';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from '@/context/ToastContext';
 
 export default function SignupForm() {
   const [email, setEmail] = useState('');
@@ -11,22 +12,28 @@ export default function SignupForm() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { addToast } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
+    try {
+      const { error: authError } = await signUp({ email, password });
 
-    const { error: authError } = await signUp({ email, password });
-
-    if (authError) {
-      setError(authError.message || 'حدث خطأ أثناء التسجيل.');
-    } else {
-      alert('تم إرسال رابط تأكيد إلى بريدك الإلكتروني. يرجى التحقق.');
-      router.push('/login');
+      if (authError) {
+        setError(authError.message || 'حدث خطأ أثناء التسجيل.');
+        addToast(authError.message || 'حدث خطأ أثناء التسجيل.', 'error');
+      } else {
+        addToast('تم إرسال رابط تأكيد إلى بريدك الإلكتروني.', 'success');
+        router.push('/login');
+      }
+    } catch (err) {
+      console.error('Signup error:', err);
+      setError(err?.message || 'حدث خطأ أثناء التسجيل.');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
