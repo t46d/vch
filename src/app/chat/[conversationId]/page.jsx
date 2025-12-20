@@ -19,9 +19,13 @@ export default function ChatPage() {
     if (!conversationId) return;
 
     let mounted = true;
+    let userId = null;
 
     const load = async () => {
       try {
+        const sessionRes = await supabase.auth.getUser();
+        userId = sessionRes?.data?.user?.id || null;
+
         const { data, error } = await supabase
           .from('messages')
           .select('id, content, created_at, sender_id')
@@ -56,7 +60,14 @@ export default function ChatPage() {
   const send = async () => {
     if (!text.trim()) return;
     try {
-      const { data, error } = await supabase.from('messages').insert({ conversation_id: conversationId, content: text }).select().single();
+      // include sender_id when available
+      const sessionRes = await supabase.auth.getUser();
+      const userId = sessionRes?.data?.user?.id || null;
+
+      const payload = { conversation_id: conversationId, content: text };
+      if (userId) payload.sender_id = userId;
+
+      const { data, error } = await supabase.from('messages').insert(payload).select().single();
       if (error) throw error;
       setText('');
       // message will arrive via realtime subscription
@@ -73,7 +84,7 @@ export default function ChatPage() {
 
         <div className="space-y-3 h-[60vh] overflow-y-auto p-2">
           {loading ? <p className="text-gray-400">Loading...</p> : messages.map(m => (
-            <ChatBubble key={m.id} isMine={false} content={m.content} timestamp={new Date(m.created_at).toLocaleTimeString()} />
+            <ChatBubble key={m.id} isMine={m.sender_id === (supabase?.auth?.session?.user?.id || null)} content={m.content} timestamp={new Date(m.created_at).toLocaleTimeString()} />
           ))}
         </div>
 
