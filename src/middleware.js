@@ -4,6 +4,10 @@ import { NextResponse } from 'next/server'
 export async function middleware(request) {
   try {
     const { supabase, response } = createClient(request)
+    if (!supabase) {
+      // If supabase not available, skip auth checks
+      return response
+    }
     const { data: { user } } = await supabase.auth.getUser()
 
     // Check if user is anonymous (guest)

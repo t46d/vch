@@ -1,37 +1,32 @@
 import { createBrowserClient } from "@supabase/ssr";
 
-// Lazily create browser client. During server prerender/build, env vars may
-// be missing — avoid throwing by returning a noop object. In production (Vercel)
-// ensure env vars `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are set.
 export const createClient = () => {
-  if (typeof window === 'undefined') {
-    // server environment — return noop to avoid build-time errors
-    return {
-      auth: {
-        async signInWithPassword() { return { data: null, error: new Error('Supabase client not available on server during prerender') } },
-        async signOut() { return { error: new Error('Supabase client not available') } },
-      },
-      from() {
-        return {
-          select: async () => ({ data: [], error: null }),
-        }
-      }
-    }
-  }
-
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!url || !key) {
-    console.warn('Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY — Supabase client will be a noop. Set env vars in deployment.');
+  if (!url || !key || url === 'https://dummy.supabase.co') {
+    // Return a mock client for build time
     return {
       auth: {
-        async signInWithPassword() { return { data: null, error: new Error('Missing Supabase env vars') } },
+        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+        signUp: () => Promise.resolve({ data: null, error: null }),
+        signInWithPassword: () => Promise.resolve({ data: null, error: null }),
+        signOut: () => Promise.resolve({ error: null }),
       },
-      from() {
-        return { select: async () => ({ data: [], error: null }) }
-      }
-    }
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            single: () => Promise.resolve({ data: null, error: null }),
+            order: () => ({
+              limit: () => Promise.resolve({ data: [], error: null }),
+            }),
+          }),
+        }),
+        insert: () => Promise.resolve({ data: null, error: null }),
+        update: () => Promise.resolve({ data: null, error: null }),
+        delete: () => Promise.resolve({ data: null, error: null }),
+      }),
+    };
   }
 
   return createBrowserClient(url, key);
